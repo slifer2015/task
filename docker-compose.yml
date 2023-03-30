@@ -1,0 +1,10 @@
+version: "3.4"
+services:
+  task:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile
+    ports:
+      - "6060:6060"
+    env_file:
+      - cmd/.env

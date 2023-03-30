@@ -1,0 +1,141 @@
+basePath: /api/v1
+definitions:
+  api.createTaskRequest:
+    properties:
+      body:
+        items:
+          type: integer
+        type: array
+      headers:
+        additionalProperties:
+          type: string
+        type: object
+      method:
+        type: string
+      query_params:
+        additionalProperties:
+          type: string
+        type: object
+      url:
+        type: string
+    type: object
+  api.createTaskResponse:
+    properties:
+      id:
+        type: string
+    type: object
+  errorx.Error:
+    properties:
+      codes:
+        items:
+          $ref: '#/definitions/errorx.ErrorDetails'
+        type: array
+      name:
+        type: string
+    type: object
+  errorx.ErrorDetails:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  errorx.Result:
+    properties:
+      code:
+        type: string
+      details:
+        type: string
+      errors:
+        items:
+          $ref: '#/definitions/errorx.Error'
+        type: array
+    type: object
+  task.JobResult:
+    properties:
+      headers:
+        additionalProperties:
+          items:
+            type: string
+          type: array
+        type: object
+      httpStatusCode:
+        type: integer
+      length:
+        type: integer
+      status:
+        type: string
+    type: object
+host: localhost:9090
+info:
+  contact:
+    email: contact@email.io
+    name: CONTACT NAME
+    url: http://www.contact.url
+  description: Task micro-service
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Task API
+  version: "1.0"
+paths:
+  /task:
+    post:
+      consumes:
+      - application/json
+      description: Create task.
+      parameters:
+      - description: method, url, headers, query_params, timeout_in_milliseconds,
+          body
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/api.createTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.createTaskResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errorx.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errorx.Result'
+      summary: Create Task
+      tags:
+      - task
+  /task/{id}:
+    get:
+      description: Get task.
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/task.JobResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errorx.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errorx.Result'
+      summary: Get Task
+      tags:
+      - task
+swagger: "2.0"
